@@ -8,6 +8,10 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Log;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+
 
 class RegisterController extends Controller
 {
@@ -38,7 +42,9 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        // $this->middleware('guest');
+        Log::info('RegisterController __construct');
+
     }
 
     /**
@@ -51,7 +57,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -66,8 +72,53 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
-            'email' => $data['email'],
+            // 'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
     }
+
+
+    // https://ithelp.ithome.com.tw/articles/10193488
+    // $user = new App\User;
+    // $user->name = 'test020';
+    // $user->password = Hash::make('123456');
+    // $user->password = bcrypt("12345");
+    // $user->save();
+    
+    function register(Request $request){
+    //     User::create([
+    //         'name' => $request->'name',
+    //         'password' => Hash::make($request->'password'),
+    //     ]);
+          try {
+            $rules = [
+                "name" => "required|string|unique:users",
+                "password" => "required|string",
+            ];
+            $message = [
+                "name.required" => "請輸入name",
+                "password.required" => "請輸入password"
+            ];
+            $validResult = $request->validate($rules, $message);
+
+        } catch (ValidationException $exception) {
+
+            $errorMessage = $exception->validator->errors()->first();
+            return response()->json([
+                'message' => $errorMessage
+            ], 400);
+        }
+
+
+        $newRegister = new User;
+        $newRegister->name = $request->name;
+        $newRegister->password = $request->password;
+        $newRegister->save();
+
+        Log::info($newRegister);
+        return response()->json(['message' => 'add success'], 201);
+
+
+    }
+
 }

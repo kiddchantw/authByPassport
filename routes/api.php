@@ -25,10 +25,7 @@ Route::get('/', function () {
 // Route::middleware('auth:api')->post('user', 'Auth\LoginController@authenticate');  //查看
 
 
-Route::middleware('auth:api')->group(function() {
-    Route::get('user/{userId}/detail', 'Auth\LoginController@show');
-    // Route::get('user/{userId}/task', 'TaskController@index');
-});
+
 
 // Auth::routes();
 
@@ -50,7 +47,10 @@ Route::post('register', 'Auth\RegisterController@register');
 // Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 // Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-
+Route::middleware('auth:api')->group(function() {
+    Route::get('user/{userId}/detail', 'Auth\LoginController@show');
+    // Route::get('user/{userId}/task', 'TaskController@index');
+});
 
 
 

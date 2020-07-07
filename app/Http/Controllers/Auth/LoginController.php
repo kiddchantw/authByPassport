@@ -139,7 +139,14 @@ class LoginController extends Controller
 
     public function show(Request $request, $userId)
     {
-        // if (Auth::user()->id == $userId) {
+
+        // if (Auth::guest()) 
+        // {
+        //     return response()->json(['message' => Auth::guest()], 200);
+        // }
+
+
+        if (Auth::user()->id == $userId) {
             //回傳user info
             //m1: 用auth拿自己的資料    
             // return response()->json(['message' => Auth::user()], 200);
@@ -150,9 +157,9 @@ class LoginController extends Controller
                 return response()->json(['message' => $user], 200);
             }
             return response()->json(['message' => 'User not found!'], 404);
-        // } else {
-        //     //回傳 id error 
-        //     return response()->json(['message' => 'User id error'], 404);
-        // }
+        } else {
+            //回傳 id error 
+            return response()->json(['message' => 'User id error'], 404);
+        }
     }
 }

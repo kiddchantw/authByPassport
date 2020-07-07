@@ -30,5 +30,13 @@ class AuthServiceProvider extends ServiceProvider
 
         //
         Passport::routes();
+        
+        //有用：但會跑     .    
+        
+        Passport::personalAccessTokensExpireIn(now()->addMinutes(1));
+
+
+        // Passport::tokensExpireIn(now()->addMinutes(1));
+
     }
 }

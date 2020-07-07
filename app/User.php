@@ -17,13 +17,15 @@ use Illuminate\Support\Facades\Hash;
 // use Illuminate\Notifications\Notifiable;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Laravel\Passport\HasApiTokens;
+
 
 class User extends Authenticatable  
 {
     // use AuthenticableTrait;
-    // use Notifiable,SoftDeletes;
-
-    use Notifiable;
+    
+    use Notifiable,HasApiTokens;
+    // use Notifiable ;
 
     protected $table = 'users';
 
@@ -63,12 +65,11 @@ class User extends Authenticatable
             //m1 ok
             //$this->attributes['password'] = bcrypt($password);
             
-            //m2 use Illuminate\Support\Facades\Crypt;
+            //m2 use Illuminate\Support\Facades\Crypt; 但無法用auth:attempt
             //$this->attributes['password'] = Crypt::encryptString($password);
 
             //m3 用hash make 
             $this->attributes['password'] = Hash::make($password);
-
 
         }
     }

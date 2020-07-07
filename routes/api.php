@@ -25,6 +25,10 @@ Route::get('/', function () {
 // Route::middleware('auth:api')->post('user', 'Auth\LoginController@authenticate');  //查看
 
 
+Route::middleware('auth:api')->group(function() {
+    Route::get('user/{userId}/detail', 'Auth\LoginController@show');
+    // Route::get('user/{userId}/task', 'TaskController@index');
+});
 
 // Auth::routes();
 
@@ -33,7 +37,7 @@ Route::get('/', function () {
 Route::post('login', 'Auth\LoginController@login');
  // Route::post('login', 'Auth\LoginController@authenticate');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-Route::post('authenticate', 'Auth\LoginController@authenticate')->name('authenticate');
+// Route::post('authenticate', 'Auth\LoginController@authenticate')->name('authenticate');
 
 
 // // Registration Routes...

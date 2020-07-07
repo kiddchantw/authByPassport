@@ -86,33 +86,24 @@ class LoginController extends Controller
 
 
         /*測試區*/
-
+        //m3  passport token ok 
         $credentials = $request->only('name', 'password');
         var_dump($credentials);
 
         if (Auth::guard()->attempt($credentials)) {
+            //return response()->json(['message' => "login success"], 200);
+            $user = Auth::user();
+
+            // $token = $user->createToken("myapp");
+            $token = $user->createToken($user->name . '-' . now());
 
 
-            return response()->json(['message' => "login success"], 200);
+            return response()->json([
+                'token' => $token->accessToken
+            ]);
         } else {
             return response()->json(['error01' => 'invalid name or password'], 401);
         }
-
-        // var_dump(Auth::attempt($credentials));
-        // $credentials2 = array(
-        //     'name'   => $request->name , ///Input::get('name')
-        //     //'password' =>  Hash::make($request->password) //Input::get('password'),
-        //     'password' =>  Crypt::encryptString($request->password) //Input::get('password'),
-        // );
-        // dd($credentials2);
-
-        // var_dump($userdata);
-        // $userLogin  =  User::where([['name','=',$request->name],['password','=', $request->password]])->first();
-        // if ( Auth::login($userLogin) )
-        // {
-        // if (Auth::attempt($credentials)) {
-
-
 
 
     }
@@ -135,9 +126,6 @@ class LoginController extends Controller
         // $passwordEncode = Auth::user()->password;
         // dd( $passwordEncode);
 
-
-
-
         // echo "authenticate";
         // dd(auth()->user());
         dd(Auth::user()); //->password ) ;
@@ -146,5 +134,25 @@ class LoginController extends Controller
 
 
         // var_dump( password_verify('rasmuslerdorf', $passwordEncode) );
+    }
+
+
+    public function show(Request $request, $userId)
+    {
+        // if (Auth::user()->id == $userId) {
+            //回傳user info
+            //m1: 用auth拿自己的資料    
+            // return response()->json(['message' => Auth::user()], 200);
+
+            //m2:用 ORM透過userId取資料，但好像也能拿其他userID看其他人的資料
+            $user = User::find($userId);
+            if ($user) {
+                return response()->json(['message' => $user], 200);
+            }
+            return response()->json(['message' => 'User not found!'], 404);
+        // } else {
+        //     //回傳 id error 
+        //     return response()->json(['message' => 'User id error'], 404);
+        // }
     }
 }

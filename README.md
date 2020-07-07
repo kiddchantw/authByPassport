@@ -8,9 +8,11 @@ only route/api.php
 
 
 ### done
-- login
-- detail
 
+app/Http/Controllers/Auth/LoginController.php
+- login 
+- detail
+    
 ### unfinish
 - token 時效
 - reset password 

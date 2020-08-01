@@ -97,13 +97,12 @@ class LoginController extends Controller
             // $token = $user->createToken("myapp");
             $token = $user->createToken($user->name . '-' . now());
 
-
             return response()->json([
                 'token' => $token->accessToken
             ]);
         } else {
             return response()->json(['error01' => 'invalid name or password'], 401);
-        }
+        g}
 
 
     }

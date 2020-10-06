@@ -61,7 +61,7 @@ class LoginController extends Controller
 
     /**
      * Handle an authentication attempt.
-     * 
+     *
      * @param  \Illuminate\Http\Request $request
      *
      * @return Response
@@ -69,7 +69,7 @@ class LoginController extends Controller
     //https://learnku.com/docs/laravel/7.x/authentication/7474
     public function login(Request $request)
     {
-        //m1 直接用orm找 ok 
+        //m1 直接用orm找 ok
         // $user = User::where([['name','=',$request->name],['password','=', $request->password]])->first();
         // return $user;
 
@@ -86,9 +86,9 @@ class LoginController extends Controller
 
 
         /*測試區*/
-        //m3  passport token ok 
+        //m3  passport token ok
         $credentials = $request->only('name', 'password');
-        var_dump($credentials);
+//        var_dump($credentials);
 
         if (Auth::guard()->attempt($credentials)) {
             //return response()->json(['message' => "login success"], 200);
@@ -102,7 +102,7 @@ class LoginController extends Controller
             ]);
         } else {
             return response()->json(['error01' => 'invalid name or password'], 401);
-        g}
+        }
 
 
     }
@@ -139,7 +139,7 @@ class LoginController extends Controller
     public function show(Request $request, $userId)
     {
 
-        // if (Auth::guest()) 
+        // if (Auth::guest())
         // {
         //     return response()->json(['message' => Auth::guest()], 200);
         // }
@@ -147,17 +147,17 @@ class LoginController extends Controller
 
         if (Auth::user()->id == $userId) {
             //回傳user info
-            //m1: 用auth拿自己的資料    
-            // return response()->json(['message' => Auth::user()], 200);
+            //m1: 用auth拿自己的資料
+             return response()->json(['message' => Auth::user()], 200);
 
             //m2:用 ORM透過userId取資料，但好像也能拿其他userID看其他人的資料
-            $user = User::find($userId);
-            if ($user) {
-                return response()->json(['message' => $user], 200);
-            }
-            return response()->json(['message' => 'User not found!'], 404);
+//            $user = User::find($userId);
+//            if ($user) {
+//                return response()->json(['message' => $user], 200);
+//            }
+//            return response()->json(['message' => 'User not found!'], 404);
         } else {
-            //回傳 id error 
+            //回傳 id error
             return response()->json(['message' => 'User id error'], 404);
         }
     }
